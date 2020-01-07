@@ -10,7 +10,6 @@ import javax.persistence.Table
 public class Alumno {
 
 	@Id
-	@Column (name="idAlumnoMatricula")
 	private String idMatricula;
 
 	@Column (name="alumno_nombre")

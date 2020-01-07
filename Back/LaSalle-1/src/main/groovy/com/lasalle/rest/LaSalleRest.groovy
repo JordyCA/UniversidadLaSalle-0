@@ -3,10 +3,13 @@ package com.lasalle.rest
 import com.lasalle.model.Alumno
 import com.lasalle.model.Inscripcion
 import com.lasalle.model.Usuario
+import com.lasalle.model.UsuarioCorreo
 import com.lasalle.repo.IAlumnoRepo
 import com.lasalle.repo.IInscripcionRepo
 import com.lasalle.repo.IUsuarioRepo
+import com.lasalle.service.MailService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.mail.MailException
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -27,6 +30,12 @@ public class LaSalleRest {
 	@Autowired
 	private IInscripcionRepo repo3;
 	
+	@Autowired
+	private MailService notificationService;
+	
+	@Autowired
+	private UsuarioCorreo usuarioCorreo;
+	
 	
 	@GetMapping("/alumno")
 	public List<Alumno> listar(){
@@ -42,4 +51,20 @@ public class LaSalleRest {
 	public List<Inscripcion> listar3(){
 		return repo3.findAll();
 	}
+	
+	@RequestMapping("/send-email")
+	public String send() {
+		
+		usuarioCorreo.setEmailAddress("andorid124@gmail.com");
+		
+		try {
+		notificationService.sendEmail(usuarioCorreo);
+		} catch (MailException mailException) {
+			return mailException;
+		} 
+		
+		return "Congratulations! Your mail has been send to the user.";
+	}
+	
+	
 }
