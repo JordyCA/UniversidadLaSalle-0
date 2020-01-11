@@ -10,7 +10,7 @@ import javax.persistence.Table
 public class Alumno {
 
 	@Id
-	private String idMatricula;
+	private String idAlumnoMatricula;
 
 	@Column (name="alumno_nombre")
 	private String nombre;
@@ -30,46 +30,61 @@ public class Alumno {
 	@Column (name="alumno_fecha")
 	private String fecha;
 
-	public java.lang.Object getIdMatricula() {
-		return idMatricula;
+	public String getIdAlumnoMatricula() {
+		return idAlumnoMatricula;
 	}
-	public void setIdMatricula(java.lang.Object idMatricula) {
-		this.idMatricula = idMatricula;
+
+	public void setIdAlumnoMatricula(String idAlumnoMatricula) {
+		this.idAlumnoMatricula = idAlumnoMatricula;
 	}
-	public java.lang.Object getNombre() {
+
+	public String getNombre() {
 		return nombre;
 	}
-	public void setNombre(java.lang.Object nombre) {
+
+	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public java.lang.Object getPaterno() {
+
+	public String getPaterno() {
 		return paterno;
 	}
-	public void setPaterno(java.lang.Object paterno) {
+
+	public void setPaterno(String paterno) {
 		this.paterno = paterno;
 	}
-	public java.lang.Object getMaterno() {
+
+	public String getMaterno() {
 		return materno;
 	}
-	public void setMaterno(java.lang.Object materno) {
+
+	public void setMaterno(String materno) {
 		this.materno = materno;
 	}
-	public java.lang.Object getCorreo() {
+
+	public String getCorreo() {
 		return correo;
 	}
-	public void setCorreo(java.lang.Object correo) {
+
+	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
-	public java.lang.Object getAcademico() {
+
+	public String getAcademico() {
 		return academico;
 	}
-	public void setAcademico(java.lang.Object academico) {
+
+	public void setAcademico(String academico) {
 		this.academico = academico;
 	}
-	public java.lang.Object getFecha() {
+
+	public String getFecha() {
 		return fecha;
 	}
-	public void setFecha(java.lang.Object fecha) {
+
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
+
+	
 }

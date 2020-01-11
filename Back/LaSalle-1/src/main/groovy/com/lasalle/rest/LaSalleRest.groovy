@@ -8,8 +8,11 @@ import com.lasalle.repo.IAlumnoRepo
 import com.lasalle.repo.IInscripcionRepo
 import com.lasalle.repo.IUsuarioRepo
 import com.lasalle.service.MailService
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mail.MailException
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -42,6 +45,15 @@ public class LaSalleRest {
 		return repo.findAll();
 	}
 	
+	@CrossOrigin
+	@PostMapping("/alumnoingreso")
+	public void insertarAlumno(@RequestBody Alumno alumno) {
+		LocalDate localDate = LocalDate.now()
+		//System.out.println(localDate);
+		alumno.setFecha((String)localDate);
+		repo.save(alumno);
+	}
+		
 	@GetMapping("/usuario")
 	public List<Usuario> listar2(){
 		return repo2.findAll();
