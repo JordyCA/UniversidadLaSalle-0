@@ -22,6 +22,6 @@ export class FormularioComponent implements OnInit {
     //console.log(form);
     //console.log(this.formulario);
     //this.formularioService.crearAlumno( this.formulario );
-    this.formularioService.crearAlumno();
+    this.formularioService.crearAlumno( this.formulario);
   }
 }
