@@ -50,6 +50,7 @@ public class LaSalleRest {
 	public void insertarAlumno(@RequestBody Alumno alumno) {
 		LocalDate localDate = LocalDate.now()
 		//System.out.println(localDate);
+		alumno.setAcademico("ninguno");
 		alumno.setFecha((String)localDate);
 		repo.save(alumno);
 	}
