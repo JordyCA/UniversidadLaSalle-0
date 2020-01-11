@@ -1,0 +1,59 @@
+<h1> Registro de inscripcion </h1>
+
+<div>
+    <form (ngSubmit) = "guardar( f )"
+        #f = "ngForm">
+        <div>
+            <label> Matricula: </label>
+            <input 
+                type="text"
+                maxlength="9"
+                placeholder="Matricula"
+                [(ngModel)] = "formulario.idAlumnoMatricula"
+                name="idAlumnoMatricula"
+                required>
+        </div>
+        <div>
+            <label> Nombre(s): </label>
+            <input 
+                type="text"
+                placeholder="Nombre(s)"
+                [(ngModel)] = "formulario.nombre"
+                name="nombre"
+                required>
+        </div>
+        <div>
+            <label> Apellido Paterno: </label>
+            <input 
+                type="text"
+                placeholder="Apellido Paterno"
+                [(ngModel)] = "formulario.paterno"
+                name="paterno"
+                required>
+        </div>
+        <div>
+            <label> Apellido Materno: </label>
+            <input 
+                type="text"
+                placeholder="Apellido Materno"
+                [(ngModel)] = "formulario.materno"
+                name="materno"
+                required>
+        </div>
+        <div>
+            <label> Correo: </label>
+            <input 
+                type="email"
+                placeholder="E-Mail"
+                [(ngModel)] = "formulario.correo"
+                name="correo"
+                required>
+        </div>
+
+        <div>
+            <button type="submit">
+                Registarse
+            </button>
+        </div>
+    </form>
+</div>
