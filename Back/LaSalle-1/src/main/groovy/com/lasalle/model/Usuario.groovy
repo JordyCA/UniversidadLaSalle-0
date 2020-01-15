@@ -1,5 +1,6 @@
 package com.lasalle.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -12,18 +13,23 @@ import javax.persistence.Table
 public class Usuario {
 	
 	@Id
+	@JsonProperty("Id_Usuario")
 	private Integer idUsr;
 	
 	@Column(name="usuario_usuario")
+	@JsonProperty("usuario")
 	private String usuario;
 	
 	@Column(name="usuario_contraseña")
+	@JsonProperty("ccc")
 	private String contrasena;
 	
 	@Column(name="usuario_status")
+	@JsonProperty("status")
 	private Integer estatus;
 	
 	@Column(name="usuario_fecha")
+	@JsonProperty("fecha")
 	private String fecha;
 	
 	@OneToOne
@@ -70,13 +76,14 @@ public class Usuario {
 		this.fecha = fecha;
 	}
 
-	public String getIdAlumno() {
+	public Alumno getIdAlumno() {
 		return IdAlumno;
 	}
 
-	public void setIdAlumno(String idAlumno) {
+	public void setIdAlumno(Alumno idAlumno) {
 		IdAlumno = idAlumno;
 	}
+
 	
 	
 }

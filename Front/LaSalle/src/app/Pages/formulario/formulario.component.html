@@ -50,10 +50,40 @@
                 required>
         </div>
 
+        
+        <div>
+            <p>Grado: </p>
+            <select name="combo"  [(ngModel)] = "formulario.grado" (change)="cambiarGradoAcademico($event.target.value)" required>
+                <option *ngFor="let grado of gradoAcademico;" [value]="grado.id" > 
+                    {{grado.nombreGrado}} 
+                </option>
+            </select>
+        </div>
+
+
+
+        <div>
+            <p>Especialidad: </p>
+            <select name="combo"  [(ngModel)] = "formulario.especialidad" required>
+                <option *ngFor="let especialidad of especialidad;" [value]="especialidad.id"  > {{especialidad.nombre}} </option>
+            </select>
+        </div>
+
+        <div *ngFor= "let c of datos">
+            <p>hola soy </p>
+            <div>
+                
+                <h2>  {{ c.usuario }}</h2>
+            </div>
+        </div>
+        <br>        
+
         <div>
             <button type="submit">
                 Registarse
             </button>
         </div>
     </form>
+
+    
 </div>

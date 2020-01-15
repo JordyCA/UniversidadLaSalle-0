@@ -12,25 +12,28 @@ import javax.persistence.Table
 public class Inscripcion {
 	
 	@Id
-	@Column(name ="idInscripcion")
+	@Column(name ="id_inscripcion")
 	private Integer idInscripcion;
 	
 	@OneToOne
 	@JoinColumn
 	private Alumno idAlumnoMatricula;
 	
-	@Column(name = "idNivelAcademico")
-	private Integer idNivelAcademico;
-	
 	@Column(name = "inscripcion_fecha")
 	private String fechaInscripcion;
+	
+	@Column(name = "id_nivel_academico")
+	private String nivelAcademico;
+	
+	@Column(name = "id_cat_especialidad")
+	private String especialidad;
 
-	public Integer getIdDescripcion() {
-		return idDescripcion;
+	public Integer getIdInscripcion() {
+		return idInscripcion;
 	}
 
-	public void setIdDescripcion(Integer idDescripcion) {
-		this.idDescripcion = idDescripcion;
+	public void setIdInscripcion(Integer idInscripcion) {
+		this.idInscripcion = idInscripcion;
 	}
 
 	public Alumno getIdAlumnoMatricula() {
@@ -41,20 +44,28 @@ public class Inscripcion {
 		this.idAlumnoMatricula = idAlumnoMatricula;
 	}
 
-	public Integer getIdNivelAcademico() {
-		return idNivelAcademico;
-	}
-
-	public void setIdNivelAcademico(Integer idNivelAcademico) {
-		this.idNivelAcademico = idNivelAcademico;
-	}
-
 	public String getFechaInscripcion() {
 		return fechaInscripcion;
 	}
 
 	public void setFechaInscripcion(String fechaInscripcion) {
 		this.fechaInscripcion = fechaInscripcion;
+	}
+
+	public String getNivelAcademico() {
+		return nivelAcademico;
+	}
+
+	public void setNivelAcademico(String nivelAcademico) {
+		this.nivelAcademico = nivelAcademico;
+	}
+
+	public String getEspecialidad() {
+		return especialidad;
+	}
+
+	public void setEspecialidad(String especialidad) {
+		this.especialidad = especialidad;
 	}
 	
 	
