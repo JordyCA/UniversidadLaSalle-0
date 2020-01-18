@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Component } from '@angular/core';
 import { FormularioModel } from '../Model/formulario.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +12,11 @@ export class FormularioService {
 
   private url = 'http://localhost:5000/alumnoingreso';
 
+  
+  datos = [];
+
+  private  usuario :  any[];
+
   // Http Options
   httpOptions = {
     headers: new HttpHeaders({
@@ -16,45 +24,20 @@ export class FormularioService {
     })
   }
 
-  constructor(private http: HttpClient) { }
-
-  /*private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent){
-      console.error('An error  ocurred:', error.error.message)
-    } else {
-      console.error(`Backend returned code ${error.status},` + `body was: ${error.error}`);
-    }
-    return throwError ('Something bad happended; please try again later.');
-  }*/
+  constructor(private http: HttpClient, private router: Router) { }
 
   crearAlumno (formulariomodel :FormularioModel) {
-    //console.log(formulario);
-    //const params =  new HttpParams().set('idAlumnoMatricula',"333145222").set("nombre","juan").set("paterno","carrillo").set("materno","quintero").set("correo","andorid124@gmail.com").set("academico","ninguno");
-    /*return this.http.post(`${ this.url }`, JSON.stringify(params),this.httpOptions)
-    .subscribe(
-      (val) => {
-          console.log("POST call successful value returned in body", 
-                      val);
-      },
-      response => {
-          console.log("POST call in error", response);
-      },
-      () => {
-          console.log("The POST observable is now completed.");
-      });*/
-    //return this.http.post(`${ this.url }`, params);
-    return this.http.post(`http://localhost:5000/alumnoingreso`,formulariomodel)
-       .subscribe(
-      (val) => {
-          console.log("POST call successful value returned in body", 
-                      val);
-      },
-      response => {
-          console.log("POST call in error", response);
-      },
-      () => {
-          console.log("The POST observable is now completed.");
-      });
-  //
+    console.log(formulariomodel);
+
+    return this.http.post(`http://localhost:5000/alumnoingreso`,formulariomodel);
+
+  }
+
+  checarUsuario(matricula:String){
+     return this.http.get(`http://localhost:5000/verificarusuario?matricula=` + matricula);
+  }
+
+  checaUsuario2() : Observable<any> {
+    return this.http.get<any>(`http://localhost:5000/verificarusuario`);
   }
 }

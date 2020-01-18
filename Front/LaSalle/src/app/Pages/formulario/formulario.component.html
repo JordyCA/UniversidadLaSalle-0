@@ -1,59 +1,77 @@
 <h1> Registro de inscripcion </h1>
 
+<div *ngIf="manejoErrores">
+    <p> {{ manejoErrores }}</p>
+</div>
+
 <div>
-    <form (ngSubmit) = "guardar( f )"
-        #f = "ngForm">
+    <form (ngSubmit)="guardar( f )" #f="ngForm">
         <div>
             <label> Matricula: </label>
-            <input 
-                type="text"
-                maxlength="9"
-                placeholder="Matricula"
-                [(ngModel)] = "formulario.idAlumnoMatricula"
-                name="idAlumnoMatricula"
-                required>
+            <input type="text" maxlength="9" placeholder="Matricula (9 dígitos)" [(ngModel)]="formulario.idAlumnoMatricula" name="idAlumnoMatricula" (change)="validarCuenta($event.target.value)" required>
         </div>
         <div>
             <label> Nombre(s): </label>
-            <input 
-                type="text"
-                placeholder="Nombre(s)"
-                [(ngModel)] = "formulario.nombre"
-                name="nombre"
-                required>
+            <input type="text" placeholder="Nombre(s)" [(ngModel)]="formulario.nombre" name="nombre" required>
         </div>
         <div>
             <label> Apellido Paterno: </label>
-            <input 
-                type="text"
-                placeholder="Apellido Paterno"
-                [(ngModel)] = "formulario.paterno"
-                name="paterno"
-                required>
+            <input type="text" placeholder="Apellido Paterno" [(ngModel)]="formulario.paterno" name="paterno" required>
         </div>
         <div>
             <label> Apellido Materno: </label>
-            <input 
-                type="text"
-                placeholder="Apellido Materno"
-                [(ngModel)] = "formulario.materno"
-                name="materno"
-                required>
+            <input type="text" placeholder="Apellido Materno" [(ngModel)]="formulario.materno" name="materno" required>
         </div>
         <div>
             <label> Correo: </label>
-            <input 
-                type="email"
-                placeholder="E-Mail"
-                [(ngModel)] = "formulario.correo"
-                name="correo"
-                required>
+            <input type="email" placeholder="E-Mail" [(ngModel)]="formulario.correo" name="correo" required>
         </div>
 
         <div>
-            <button type="submit">
+            <p>Semestre: </p>
+            <select name="combo" [(ngModel)]="formulario.semestre" (change)="verificarSemestre($event.target.value)" required>
+                <option *ngFor="let semestre of semestre" [value]="semestre.id">
+                    {{semestre.semestre}}
+                </option>
+            </select>
+        </div>
+
+
+
+        <div>
+            <p>Grado: </p>
+            <select name="combo" [(ngModel)]="formulario.grado" (change)="cambiarGradoAcademico($event.target.value)" required>
+                <option *ngFor="let grado of gradoAcademico;" [value]="grado.id" > 
+                    {{grado.nombreGrado}} 
+                </option>
+            </select>
+        </div>
+
+
+
+        <div>
+            <p>Especialidad: </p>
+            <select name="combo" [(ngModel)]="formulario.especialidad" required>
+                <option *ngFor="let especialidad of especialidad;" [value]="especialidad.id"  > {{especialidad.nombre}} </option>
+            </select>
+        </div>
+
+        <div *ngIf="usuario2">
+            <p>hola soy </p>
+            <div>
+                <h2> {{ usuario2.matricula }}</h2>
+            </div>
+        </div>
+        <br>
+
+        <div>
+            <button type="submit ">
                 Registarse
             </button>
         </div>
     </form>
+
+
+
+
 </div>

@@ -5,29 +5,42 @@ import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.Table
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 @Entity
 @Table(name="cat_alumno")
 public class Alumno {
 
 	@Id
+	@JsonProperty("matricula")
 	private String idAlumnoMatricula;
 
 	@Column (name="alumno_nombre")
+	@JsonProperty("nombre")
 	private String nombre;
 
 	@Column (name="alumno_paterno")
+	@JsonProperty("paterno")
 	private String paterno;
 
 	@Column (name="alumno_materno")
+	@JsonProperty("materno")
 	private String materno;
 
 	@Column (name="alumno_correo")
+	@JsonProperty("correo")
 	private String correo;
 
 	@Column (name="alumno_academico")
+	@JsonProperty("academico")
 	private String academico;
+	
+	@Column (name="alumno_semestre")
+	@JsonProperty("semestre")
+	private Integer semestre;
 
 	@Column (name="alumno_fecha")
+	@JsonProperty("fecha")
 	private String fecha;
 
 	public String getIdAlumnoMatricula() {
@@ -76,6 +89,14 @@ public class Alumno {
 
 	public void setAcademico(String academico) {
 		this.academico = academico;
+	}
+	
+	public Integer getSemestre() {
+		return semestre;
+	}
+
+	public void setSemestre(Integer semestre) {
+		this.semestre = semestre;
 	}
 
 	public String getFecha() {

@@ -4,6 +4,9 @@ export class FormularioModel {
     paterno:string;
     materno:string;
     correo:string;
+    grado:string;
+    especialidad:string;
+    semestre:string;
 
     constructor(){
         
