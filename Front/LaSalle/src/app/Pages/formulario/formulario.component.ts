@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormularioService } from '../../services/formulario.service';
 import { NgForm } from '@angular/forms';
 import { FormularioModel } from '../../Model/formulario.model';
-import { Formulario2Model } from '../../Model/formulario2.model';
+import { Globals } from '../../Model/globals';
 import { analyzeNgModules } from '@angular/compiler';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,14 +10,31 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-formulario',
   templateUrl: './formulario.component.html',
-  styleUrls: ['./formulario.component.css'],
-  providers: [FormularioService]
+  styleUrls: ['./formulario.component.css']
+  //providers: [FormularioService]
 })
 export class FormularioComponent implements OnInit {
+
+  constructor( private formularioService : FormularioService) { }
+
   private especialidad : any[] ;
+  public usuario2 : any;
+  public manejoErrores :  string = ""; 
+
   datos : any []; 
   datos2 : any[]; 
   usuario : any[];
+
+  private semestre: any = [
+    {id:1, semestre: "Primer Semestre"},
+    {id:2, semestre: "Segundo Semestre"},
+    {id:3, semestre: "Tercer Semestre"},
+    {id:4, semestre: "Cuarto semestre"},
+    {id:5, semestre: "Quinto Semestre"},
+    {id:6, semestre: "Sexto Semestre"},
+    {id:7, semestre: "Septimo Semestre"},
+    {id:8, semestre: "Octavo semestre"}
+  ];
 
   private licenciatura: any = [
     {id:1, nombre: "Ingenieria de software"},
@@ -46,13 +63,22 @@ export class FormularioComponent implements OnInit {
 
   formulario = new  FormularioModel;
 
-  constructor( private formularioService : FormularioService ) { }
-
   ngOnInit() {
+    /*this.formularioService.checaUsuario2()
+    .subscribe( 
+      (result) => {
+        //console.log(result);
+        this.usuario2 = result.idAlumno;
+      }, 
+      (error) => {
+        console.log(<any>error);
+      }
+
+    ) ;*/
   }
 
   cambiarGradoAcademico(grado){
-  console.log(grado);
+  //console.log(grado);
       if (grado == 2) {
         this.especialidad = this.licenciatura;
       } else if (grado == 1) {
@@ -62,49 +88,59 @@ export class FormularioComponent implements OnInit {
       }else {
         this.especialidad = [];
       }
+  }
 
-      this.formularioService.checarUsuario() 
-        .subscribe((res:any[])=>{
+  validarCuenta(matricula){
+    //console.log(matricula);
+    this.formularioService.checarUsuario(matricula) 
+        .subscribe(
+          (res:any[])=>{
           //this.crearArrego(res);
           //console.log(res);
           //var info = JSON.parse(JSON.stringify(res));
-          this.datos = res;
-          
+          //this.datos = res;          
           //console.log(info);
-        });
-        /*.pipe(
-          map( res => {
-            var info = JSON.parse(JSON.stringify(res));
-            this.datos = info;
-            console.log(info);
-          })
-        )*/
-        /*.subscribe((res) => {
-          var info = JSON.parse(JSON.stringify(res));
-          this.datos = info;
-          })
-        */
-       /*.subscribe( res => {
-         this.crearArrego (res)
-       })
-        ;*/
-        this.formularioService.checaUsuario2()
-        .subscribe(
-          (result) => {
-            this.datos2 = result;
-        }, 
+        },
         (error) => {
-          console.log(<any>error);
-        });
-      console.log(this.datos);
+          var info = JSON.parse(JSON.stringify(error));
+          console.log(info.error.text);
+          if (info.error.text === '400 BAD_REQUEST') {
+            console.log ("Se validará en el formulario")
+            this.manejoErrores =  "El usuario ya existe";
+          } else {
+            this.manejoErrores = "";
+          }
+        }
+        );
+  }
 
+  verificarSemestre(semestre){
+    if (semestre != 1) {
+      this.manejoErrores = "Solamente si es de primer semestre se puede registrar";
+    } else {
+      this.manejoErrores = "";
+    }
+    
   }
   guardar( form: NgForm ) {
-    this.formularioService.checarUsuario() ;
+    //this.formularioService.checarUsuario() ;
     
-    //this.formularioService.crearAlumno( this.formulario );
-    //this.formularioService.crearAlumno( this.formulario);
+    this.formularioService.crearAlumno( this.formulario )
+    .subscribe(
+      (result) => {
+        var info = JSON.parse(JSON.stringify(result));
+      }, 
+      (error) => {
+        var info = JSON.parse(JSON.stringify(error));
+        console.log(info.error.text);
+        if (info.error.text === '400 BAD_REQUEST') {
+          console.log ("Se validará en el formulario")
+          this.manejoErrores =  "El formulario tiene campos faltantes o los campos no son correctos";
+        }
+      }
+      );
   }
+
 
   private crearArrego(objeto: object){
     var usuario = [];

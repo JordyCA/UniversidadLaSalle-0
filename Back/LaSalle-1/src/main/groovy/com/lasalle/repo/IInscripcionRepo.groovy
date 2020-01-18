@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.Query
 public interface IInscripcionRepo extends JpaRepository <Inscripcion, Integer> {
 	
 	@Query("SELECT max(idInscripcion) FROM Inscripcion")
-	 BigDecimal max();
+	BigDecimal max();
 }

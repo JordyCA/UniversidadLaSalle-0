@@ -6,6 +6,7 @@ export class FormularioModel {
     correo:string;
     grado:string;
     especialidad:string;
+    semestre:string;
 
     constructor(){
         

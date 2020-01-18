@@ -34,6 +34,10 @@ public class Alumno {
 	@Column (name="alumno_academico")
 	@JsonProperty("academico")
 	private String academico;
+	
+	@Column (name="alumno_semestre")
+	@JsonProperty("semestre")
+	private Integer semestre;
 
 	@Column (name="alumno_fecha")
 	@JsonProperty("fecha")
@@ -85,6 +89,14 @@ public class Alumno {
 
 	public void setAcademico(String academico) {
 		this.academico = academico;
+	}
+	
+	public Integer getSemestre() {
+		return semestre;
+	}
+
+	public void setSemestre(Integer semestre) {
+		this.semestre = semestre;
 	}
 
 	public String getFecha() {
