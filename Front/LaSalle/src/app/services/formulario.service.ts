@@ -12,11 +12,6 @@ export class FormularioService {
 
   private url = 'http://localhost:5000/alumnoingreso';
 
-  
-  datos = [];
-
-  private  usuario :  any[];
-
   // Http Options
   httpOptions = {
     headers: new HttpHeaders({
@@ -34,9 +29,12 @@ export class FormularioService {
   }
 
   checarUsuario(matricula:String){
-     return this.http.get(`http://localhost:5000/verificarusuario?matricula=` + matricula);
+    return this.http.get(`http://localhost:5000/verificarusuario?matricula=` + matricula);
   }
 
+  checarInscripcion(matricula:String){
+    return this.http.get(`http://localhost:5000/verificarinscripcion?matricula=` + matricula);
+  }
   checaUsuario2() : Observable<any> {
     return this.http.get<any>(`http://localhost:5000/verificarusuario`);
   }

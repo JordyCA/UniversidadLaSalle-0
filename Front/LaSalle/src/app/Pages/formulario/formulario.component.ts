@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormularioService } from '../../services/formulario.service';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl } from '@angular/forms';
 import { FormularioModel } from '../../Model/formulario.model';
-import 'materialize-css';
+
+import M from'materialize-css';
 import { MaterializeModule } from 'angular2-materialize';
-import { Globals } from '../../Model/globals';
 import { analyzeNgModules } from '@angular/compiler';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -18,10 +18,14 @@ import { map } from 'rxjs/operators';
 export class FormularioComponent implements OnInit {
 
   constructor( private formularioService : FormularioService) { }
-
+  
   private especialidad : any[] ;
-  public usuario2 : any;
-  public manejoErrores :  string = ""; 
+  private usuario2 : any;
+  private manejoErroresUsuario :  string = ""; 
+  private manejoErroresRegistrado :  string = ""; 
+  private manejoErroresGeneral :  string = ""; 
+  private manejoErroresSemestre :  string = ""; 
+
 
   datos : any []; 
   datos2 : any[]; 
@@ -77,12 +81,12 @@ export class FormularioComponent implements OnInit {
       }
 
     ) ;*/
-  }
 
-  
+  }
 
   cambiarGradoAcademico(grado){
   //console.log(grado);
+      document.getElementById('especialidad').setAttribute("value","0");
       if (grado == 2) {
         this.especialidad = this.licenciatura;
       } else if (grado == 1) {
@@ -94,72 +98,80 @@ export class FormularioComponent implements OnInit {
       }
   }
 
-  validarCuenta(matricula){
+  validarCuenta( matricula : String){
     //console.log(matricula);
-    this.formularioService.checarUsuario(matricula) 
-        .subscribe(
-          (res:any[])=>{
-          //this.crearArrego(res);
-          //console.log(res);
-          //var info = JSON.parse(JSON.stringify(res));
-          //this.datos = res;          
-          //console.log(info);
-        },
-        (error) => {
-          //var info = JSON.parse(JSON.stringify(error));
-          console.log('error', error.error.text);
-          //console.log();
-          if (error.error.text === '400 BAD_REQUEST') {
-            //console.log ("Se validará en el formulario")
-            this.manejoErrores =  "El usuario ya existe";
-          } else {
-            this.manejoErrores = "";
-          }
+    //validar el numero total de la matricula
+    if ( matricula.length < 9){
+      this.manejoErroresUsuario =  "El usuario es incorrecto";
+    } else {
+      this.formularioService.checarInscripcion(matricula) 
+      .subscribe(
+        (res:any[])=>{
+        //this.crearArrego(res);
+        //console.log(res);
+        //var info = JSON.parse(JSON.stringify(res));
+        //this.datos = res;          
+        //console.log(info);
+      },
+      (error) => {
+        //console.log('error', error.error.text);
+        if (error.error.text === '400 BAD_REQUEST') {
+          M.toast({html: 'El usuario ya existe', classes: 'rounded red'});
+          this.manejoErroresUsuario =  "El usuario ya existe";
+        } else {
+          this.manejoErroresUsuario =  "El usuario es correcto";
         }
-        );
+      }
+      );
+    }
+  
   }
 
   verificarSemestre(semestre){
     if (semestre != 1) {
-      this.manejoErrores = "Solamente si es de primer semestre se puede registrar";
+      this.manejoErroresSemestre = "No eres un Alumno de primer semestre, no te puedes registrar";
+      M.toast({html: 'Semestre invalido', classes: 'rounded red'});
     } else {
-      this.manejoErrores = "";
+      this.manejoErroresSemestre = "";
     }
     
   }
-  guardar( form: NgForm ) {
+  guardar( form: NgForm  ) {
     //this.formularioService.checarUsuario() ;
 
-    console.log(this.formulario.nombre);
-    
-    /*this.formularioService.crearAlumno( this.formulario )
-    .subscribe(
-      (result) => {
-        var info = JSON.parse(JSON.stringify(result));
-      }, 
-      (error) => {
-        console.log('error', error.error.text);
-        if (error.error.text === '400 BAD_REQUEST') {
-          console.log ("Se validará en el formulario")
-          this.manejoErrores =  "El formulario tiene campos faltantes o los campos no son correctos";
+    if (! (this.ValidateEmail(this.formulario.correo)) ) {
+      M.toast({html: 'El correo electrónico es invalido', classes: 'rounded red'});
+    } else if ( document.getElementById('validacionUsuario').innerHTML == " El usuario ya existe " 
+      || document.getElementById('validacionUsuario').innerHTML == " El usuario es incorrecto ") {
+      M.toast({html: 'El usuario ya existe', classes: 'rounded red'});
+    } else if (this.formulario.semestre != "1") {
+      M.toast({html: 'Semestre invalido', classes: 'rounded red'});
+    } else {
+      this.formularioService.crearAlumno( this.formulario )
+      .subscribe(
+        (result) => {
+          var info = JSON.parse(JSON.stringify(result));
+        }, 
+        (error) => {
+          console.log('error', error.error.text);
+          if (error.error.text === '400 BAD_REQUEST') {
+            console.log ("Se validará en el formulario")
+            this.manejoErroresGeneral =  "El formulario tiene campos faltantes o los campos no son correctos";
+          }
         }
-      }
-      );*/
-  }
-
-
-  private crearArrego(objeto: object){
-    var usuario = [];
-
-    if (objeto === null) {
-      this.datos = [];
+        );
     }
+
+    console.log(this.formulario);
     
-
-   var a = JSON.parse(JSON.stringify(objeto["idAlumno"]));
-   this.datos = a;
-   console.log(this.datos);
-
+   
   }
+
+private ValidateEmail(email)
+{ 
+  var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  console.log(mailformat.test(String(email).toLocaleLowerCase()));
+  return mailformat.test(String(email).toLocaleLowerCase());
+}
 
 }

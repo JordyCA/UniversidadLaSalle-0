@@ -4,9 +4,8 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { FormularioComponent } from './Pages/formulario/formulario.component';
 
-import { Globals } from './Model/globals';
 
-import 'materialize-css';
+import M from 'materialize-css';
 
 import { AppRoutingModule }  from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,7 +23,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     HttpClientModule
   ],
-  providers: [Globals],
+  providers: [],
   bootstrap: [AppComponent]
 })
 

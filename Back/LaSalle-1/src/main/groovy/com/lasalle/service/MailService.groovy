@@ -23,8 +23,8 @@ public class MailService {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		
 		mail.setTo(usuarioCorreo.getEmailAddress());
-		mail.setSubject("La salle prueba");
-		mail.setText("hurra se envío el correo");
+		mail.setSubject("Registro de Inscripción");
+		mail.setText("Su registro de Inscripción ha sido exitoso favor de ingresar a la siguiente liga http://localhost:5000/LaSalle/ingresoAlumnos con el siguiente usuario :" + usuarioCorreo.getUsuario() + " y contraseña: " + usuarioCorreo.getContrasena());
 		
 		javaMailSender.send(mail);
 	}
