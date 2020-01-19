@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormularioService } from '../../services/formulario.service';
 import { NgForm } from '@angular/forms';
 import { FormularioModel } from '../../Model/formulario.model';
+import 'materialize-css';
+import { MaterializeModule } from 'angular2-materialize';
 import { Globals } from '../../Model/globals';
 import { analyzeNgModules } from '@angular/compiler';
 import { Observable } from 'rxjs';
@@ -77,6 +79,8 @@ export class FormularioComponent implements OnInit {
     ) ;*/
   }
 
+  
+
   cambiarGradoAcademico(grado){
   //console.log(grado);
       if (grado == 2) {
@@ -102,10 +106,11 @@ export class FormularioComponent implements OnInit {
           //console.log(info);
         },
         (error) => {
-          var info = JSON.parse(JSON.stringify(error));
-          console.log(info.error.text);
-          if (info.error.text === '400 BAD_REQUEST') {
-            console.log ("Se validará en el formulario")
+          //var info = JSON.parse(JSON.stringify(error));
+          console.log('error', error.error.text);
+          //console.log();
+          if (error.error.text === '400 BAD_REQUEST') {
+            //console.log ("Se validará en el formulario")
             this.manejoErrores =  "El usuario ya existe";
           } else {
             this.manejoErrores = "";
@@ -124,21 +129,22 @@ export class FormularioComponent implements OnInit {
   }
   guardar( form: NgForm ) {
     //this.formularioService.checarUsuario() ;
+
+    console.log(this.formulario.nombre);
     
-    this.formularioService.crearAlumno( this.formulario )
+    /*this.formularioService.crearAlumno( this.formulario )
     .subscribe(
       (result) => {
         var info = JSON.parse(JSON.stringify(result));
       }, 
       (error) => {
-        var info = JSON.parse(JSON.stringify(error));
-        console.log(info.error.text);
-        if (info.error.text === '400 BAD_REQUEST') {
+        console.log('error', error.error.text);
+        if (error.error.text === '400 BAD_REQUEST') {
           console.log ("Se validará en el formulario")
           this.manejoErrores =  "El formulario tiene campos faltantes o los campos no son correctos";
         }
       }
-      );
+      );*/
   }
 
 

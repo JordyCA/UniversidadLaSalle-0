@@ -97,13 +97,24 @@ public class LaSalleRest {
 		
 		LocalDate localDate = LocalDate.now()
 		alumno.setIdAlumnoMatricula(formularioingreso.getIdAlumnoMatricula());
-		if(formularioingreso.getCorreo() != "" && formularioingreso.getCorreo() != null) {
-		
-		}
 		alumno.setCorreo(formularioingreso.getCorreo());
-		alumno.setNombre(formularioingreso.getNombre());
-		alumno.setPaterno(formularioingreso.getPaterno());
-		alumno.setMaterno(formularioingreso.getMaterno());
+		
+		if (formularioingreso.getNombre() != "" && formularioingreso.getNombre() != null) {
+			alumno.setNombre(formularioingreso.getNombre());
+		} else {
+			alumno.setNombre("-----");
+		}
+		if (formularioingreso.getPaterno() != "" && formularioingreso.getPaterno() !=  null) {
+			alumno.setPaterno(formularioingreso.getPaterno());
+		} else {
+			alumno.setPaterno("-----");
+		}
+		if (formularioingreso.getMaterno() != "" && formularioingreso.getMaterno() != null ) {
+			alumno.setMaterno(formularioingreso.getMaterno());
+		} else {
+			alumno.setMaterno("-----");
+		}
+		
 		alumno.setAcademico("ninguno");
 		alumno.setSemestre(Integer.parseInt(formularioingreso.getSemestre()));
 		alumno.setFecha((String)localDate);
