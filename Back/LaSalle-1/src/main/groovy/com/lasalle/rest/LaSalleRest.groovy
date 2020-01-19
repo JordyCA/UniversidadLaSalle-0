@@ -12,6 +12,10 @@ import com.lasalle.repo.IUsuarioRepo
 import com.lasalle.service.MailService
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import org.passay.CharacterRule
+import org.passay.PasswordGenerator
+import org.passay.EnglishCharacterData;
+import org.passay.*;
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mail.MailException
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -24,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 //@RequestMapping(value = "/alumnos", consumes = "application/json", produces = "application/json")
 //@RequestMapping("/alumno")
-public class LaSalleRest {
+public class LaSalleRest  {
 	
 	@Autowired
 	private IAlumnoRepo repo;
@@ -52,7 +56,7 @@ public class LaSalleRest {
 	
 	@CrossOrigin
 	@GetMapping("/verificarusuario")
-	public String verificar(String matricula) {
+	public String verificarUsuario(String matricula) {
 		Alumno alumno = new Alumno();
 		alumno = repo.findByidAlumnoMatricula(matricula);
 		Usuario usuario = new Usuario();
@@ -65,9 +69,23 @@ public class LaSalleRest {
 	}
 	
 	@CrossOrigin
+	@GetMapping("/verificarinscripcion")
+	public String verificarInscripcion(String matricula) {
+		Alumno alumno = new Alumno();
+		alumno = repo.findByidAlumnoMatricula(matricula);
+		Inscripcion verificarInscripcion = new Inscripcion();
+		verificarInscripcion = repo3.findInscripcionByAlumno(alumno)
+		if (verificarInscripcion != null)  {
+			System.out.println("Validacion de la inscripción");
+			return HttpStatus.BAD_REQUEST;
+		}
+		return HttpStatus.OK;
+	}
+	
+	
+	@CrossOrigin
 	@PostMapping("/alumnoingreso")
 	public String insertarAlumno(@RequestBody FormularioIngreso formularioingreso) {
-		
 		if (!
 			(((formularioingreso.getCorreo() != "") && (formularioingreso.getCorreo() != null))
 			&& ((formularioingreso.getGrado() != "") && (formularioingreso.getGrado() != null))
@@ -79,9 +97,9 @@ public class LaSalleRest {
 				return HttpStatus.BAD_REQUEST;
 		}
 		
-		/* Busqueda de verificar si el usuario no esta repetido*/
+		/*verificar si el usuario no esta repetido*/
 
-		Alumno alumnoBusqueda = new Alumno();
+		/*Alumno alumnoBusqueda = new Alumno();
 		alumnoBusqueda = repo.findByidAlumnoMatricula(formularioingreso.getIdAlumnoMatricula());
 		Usuario usuarioBusqueda = new Usuario();
 		usuarioBusqueda = repo2.findByidAlumnoMatricula(alumnoBusqueda);
@@ -89,21 +107,44 @@ public class LaSalleRest {
 		if (usuarioBusqueda != null)  {
 			System.out.println("Validacion de usuario");
 			return HttpStatus.BAD_REQUEST;
+		}*/
+		/*-----------------------------------------------------*/
+		
+		/*Verificar si el Alumno esta inscrito*/
+		Alumno alumnoBusqueda = new Alumno();
+		alumnoBusqueda = repo.findByidAlumnoMatricula(formularioingreso.getIdAlumnoMatricula());
+		Inscripcion verificarInscripcion = new Inscripcion();
+		verificarInscripcion = repo3.findInscripcionByAlumno(alumnoBusqueda)
+		if (verificarInscripcion != null)  {
+			System.out.println("Validacion de la inscripción");
+			return HttpStatus.BAD_REQUEST;
 		}
 		/*-----------------------------------------------------*/
+		
 		
 		/*------------ INSERCIÓN DEL ALUMNO--------------------*/
 		Alumno alumno = new Alumno();
 		
 		LocalDate localDate = LocalDate.now()
 		alumno.setIdAlumnoMatricula(formularioingreso.getIdAlumnoMatricula());
-		if(formularioingreso.getCorreo() != "" && formularioingreso.getCorreo() != null) {
-		
-		}
 		alumno.setCorreo(formularioingreso.getCorreo());
-		alumno.setNombre(formularioingreso.getNombre());
-		alumno.setPaterno(formularioingreso.getPaterno());
-		alumno.setMaterno(formularioingreso.getMaterno());
+		
+		if (formularioingreso.getNombre() != "" && formularioingreso.getNombre() != null) {
+			alumno.setNombre(formularioingreso.getNombre());
+		} else {
+			alumno.setNombre("-----");
+		}
+		if (formularioingreso.getPaterno() != "" && formularioingreso.getPaterno() !=  null) {
+			alumno.setPaterno(formularioingreso.getPaterno());
+		} else {
+			alumno.setPaterno("-----");
+		}
+		if (formularioingreso.getMaterno() != "" && formularioingreso.getMaterno() != null ) {
+			alumno.setMaterno(formularioingreso.getMaterno());
+		} else {
+			alumno.setMaterno("-----");
+		}
+		
 		alumno.setAcademico("ninguno");
 		alumno.setSemestre(Integer.parseInt(formularioingreso.getSemestre()));
 		alumno.setFecha((String)localDate);
@@ -121,10 +162,9 @@ public class LaSalleRest {
 			usuario.setIdUsr((Integer)repo2.max()+1)
 		}
 		
-		
-		usuario.setContrasena("prueba");
+		usuario.setContrasena(this.generatePassayPassword());
 		usuario.setEstatus(1);
-		usuario.setUsuario("hola");
+		usuario.setUsuario(formularioingreso.getIdAlumnoMatricula());
 		usuario.setIdAlumno(alumno);
 		usuario.setFecha((String)localDate);
 		
@@ -150,8 +190,11 @@ public class LaSalleRest {
 		inscripcion.setNivelAcademico(formularioingreso.getGrado());
 		inscripcion.setEspecialidad(formularioingreso.getEspecialidad());
 		repo3.save(inscripcion);
-		 //return new ResponseTransfer < Alumno >(alumnoBusqueda, HttpStatus.CONFLICT);
 		
+		/*-----------------------------------------------------*/
+		
+		/*Envio del correo electronico*/
+		this.sendEmail(formularioingreso.getCorreo(),usuario.getUsuario(), usuario.getContrasena());
 		/*-----------------------------------------------------*/
 		
 		return HttpStatus.OK;
@@ -167,19 +210,55 @@ public class LaSalleRest {
 		return repo3.findAll();
 	}
 	
-	@RequestMapping("/send-email")
-	public String send() {
-		
-		usuarioCorreo.setEmailAddress("andorid124@gmail.com");
+	//@RequestMapping("/send-email")
+	public String sendEmail(String  email, String usuario, String contrasena) {
+		System.out.println("Enviando correo eletronico");
+		usuarioCorreo.setEmailAddress(email);
+		usuarioCorreo.setUsuario(usuario);
+		usuarioCorreo.setContrasena(contrasena);
 		
 		try {
 		notificationService.sendEmail(usuarioCorreo);
 		} catch (MailException mailException) {
+			System.out.println(mailException);
 			return mailException;
 		} 
 		
-		return "Congratulations! Your mail has been send to the user.";
+		return "Se envio el correo";
 	}
 	
-	
+	public String generatePassayPassword() {
+		PasswordGenerator gen = new PasswordGenerator();
+		CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
+		CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
+		lowerCaseRule.setNumberOfCharacters(2);
+	 
+		CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
+		CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
+		upperCaseRule.setNumberOfCharacters(2);
+	 
+		CharacterData digitChars = EnglishCharacterData.Digit;
+		CharacterRule digitRule = new CharacterRule(digitChars);
+		digitRule.setNumberOfCharacters(2);
+		
+		CharacterData specialChars = new CharacterData() {
+			public String getErrorCode() {
+				return ERROR_CODE;
+			}
+	 
+			public String getCharacters() {
+				return "!@";
+			}
+		};
+		
+		CharacterRule splCharRule = new CharacterRule(specialChars);
+		splCharRule.setNumberOfCharacters(2);
+		
+		String password = gen.generatePassword(10, splCharRule, lowerCaseRule,
+			upperCaseRule, digitRule);
+		
+		System.out.println(password);
+		
+		  return password;
+	}
 }
