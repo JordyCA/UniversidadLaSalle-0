@@ -3,6 +3,7 @@ Proyecto Universidad La Salle
 
 En la carpeta Back esta el backfront 
 Esta hecho con spring boot + groovy 
+En caso de querer modificar el acceso para el mysql esta en el application.properties
 
 En la carpeta Base_Datos
 Se encuentra el modelo de base de datos (orden de sincronización => cat_alumno,cat_inscripcion,cat_usuario, cat_especialidad,cat_nivelacademico)
