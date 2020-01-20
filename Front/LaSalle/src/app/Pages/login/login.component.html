@@ -2,16 +2,16 @@
     <div>
         <div class="row center">
             <h1 class="center">Acceso Portal La Salle</h1>
-            <form>
+            <form #f="ngForm" (ngSubmit)="validacion(f)">
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="usuario" type="text" class="validate" maxlength="9" placeholder="Ingresa tu usuario" minlength="9" name="usuario" required>
+                        <input id="usuario" type="text" [(ngModel)]="formularioLogin.usuario" class="validate" maxlength="9" placeholder="Ingresa tu usuario" minlength="9" name="usuario" required>
                         <label for='usuario'> Usuario: </label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        <input id="contrasena" type="password" class="validate" placeholder="Ingresa tu contraseña" name="contrasena" required>
+                        <input id="contrasena" [(ngModel)]="formularioLogin.contrasena" type="password" class="validate" placeholder="Ingresa tu contraseña" name="contrasena" required>
                         <label for='contrasena'> Contraseña: </label>
                     </div>
                 </div>

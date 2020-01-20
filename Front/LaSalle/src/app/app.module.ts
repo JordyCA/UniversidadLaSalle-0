@@ -12,6 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SuccessComponent } from './Pages/success/success.component';
 import { LoginComponent } from './Pages/login/login.component';
+import { DatosusuarioComponent } from './Pages/datosusuario/datosusuario.component';
+
 
 
 @NgModule({
@@ -19,7 +21,8 @@ import { LoginComponent } from './Pages/login/login.component';
     AppComponent,
     FormularioComponent,
     SuccessComponent,
-    LoginComponent
+    LoginComponent,
+    DatosusuarioComponent
   ],
   imports: [
     BrowserModule,
