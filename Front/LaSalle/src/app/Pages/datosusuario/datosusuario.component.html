@@ -1,0 +1,72 @@
+<div class="row">
+    <nav>
+        <div class="nav-wrapper">
+           <h1 class="brand-logo center">Información del usuario</h1>
+           <div class="button">
+            <button class="btn validate" type="button" (click)="salida()" name="salid"> Salir
+            </button>
+        </div>
+        </div>
+      </nav>
+</div>
+
+<div class="conteiner">
+    <div>
+        <div class="row">
+            <form #f="ngForm" (ngSubmit)="actualizar(f)">
+                <div class="row col s6">
+                    Usuario: <i id="usuario">{{ this.formularioDatosAlmacenados.usuario }}</i>
+                </div>
+                <div class="row col s6">
+                    <i> Semestre: {{ this.semestre }}</i>
+                </div>
+                <div class="row col s6">
+                    <i> Nivel Academico: {{ this.nivelacademico }}</i>
+                </div>
+                <div class="row col s6">
+                    <i> Nivel Academico: {{ this.especialidad }}</i>
+                </div>
+                <div class="row col s6">
+                    <div class="input-field">
+                        <input id="nombre" type="text" placeholder="Nombre(s)" [(ngModel)]="formularioDatosUsuario.nombre" name="nombre" value="{{ this.formularioDatosAlmacenados.nombre }}">
+                        <label for="nombre">Nombre: </label>
+                    </div>
+                </div>
+                <div class="row col s6" >
+                    <div class="input-field ">
+                        <input id="paterno" type="text" placeholder="Apellido Paterno"  [(ngModel)]="formularioDatosUsuario.paterno" name="paterno"  value="{{ this.formularioDatosAlmacenados.paterno }}">
+                        <label for="paterno"> Apellido Paterno: </label>
+                    </div>
+                </div>
+                <div class="row col s6">
+                    <div class="input-field ">
+                        <input id="materno" type="text" placeholder="Apellido Materno"  [(ngModel)]="formularioDatosUsuario.materno" name="materno" value="{{ this.formularioDatosAlmacenados.materno }}">
+                        <label for="materno"> Apellido Materno: </label>
+                    </div>
+                </div>
+                <div class="row col s6">
+                    <div>
+                        <i>Correo Actual: {{ this.formularioDatosAlmacenados.correo }}</i>
+                    </div>
+                </div>
+                <div class="row col s6">
+                    <div class="input-field ">
+                        <input id="correo" type="email" class="validate" placeholder="Actualizar Correo" name="correo" [(ngModel)]="formularioDatosUsuario.correo">
+                        <label for="correo" data-error="El correo es erróneo" data-success="El correo electrónico es correcto">Correo Electrónico</label>
+                    </div>
+                </div>
+                <div class="row col s6">
+                    <div class="input-field ">
+                    <input id="password1"  [(ngModel)]="formularioDatosUsuario.contrasena" minlength="10" placeholder="Contraseña mínimo 10"name="password1" type="password" class="validate">
+                    <label for="password1">Contraseña: </label>
+                    </div>
+                </div>
+                <div class="submit-button">
+                    <button class="btn validate" type="submit" name="registarte">Actualizar Información
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

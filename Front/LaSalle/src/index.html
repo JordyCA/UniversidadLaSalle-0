@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>LaSalle</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script>
+        //MATERIALAZE TIENE UN PROBLEMA CON ANGULAR CON LOS SELECT DE LOS LISTADOS 
+        //ES LA UNICA FORMA COMO SE PUEDE FORZAR PARA PUEDA MOSTRAR TODO ESTE SHOW
+        var $select1 = $('select:not(.browser-default)');
+
+        $select1.material_select();
+        $select1.on('change', function(e) {
+            console.log('Materialize select changed: ' + e.target.value);
+        });
+
+        var $select2 = $('select.browser-default');
+        $select2.on('change', function(e) {
+            console.log('Standard select changed: ' + e.target.value);
+        });
+    </script>
+
+</head>
+
+<body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <app-root></app-root>
+</body>
+
+</html>
