@@ -82,6 +82,18 @@ public class LaSalleRest  {
 		return HttpStatus.OK;
 	}
 	
+	@CrossOrigin
+	@GetMapping("/accede")
+	public String verificarAccede(String usuario, String contrasena) {
+		System.out.println("usuario" + usuario + "contrasena" + contrasena)
+		Usuario usarioVerificar = new Usuario();
+		usarioVerificar = repo2.findByidUsuarioLoguin(usuario, contrasena);
+		if (usarioVerificar == null)  {
+			System.out.println("Validando a los usuarios");
+			return HttpStatus.BAD_REQUEST;
+		}
+		return HttpStatus.OK;
+	}
 	
 	@CrossOrigin
 	@PostMapping("/alumnoingreso")
@@ -227,6 +239,7 @@ public class LaSalleRest  {
 		return "Se envio el correo";
 	}
 	
+	//@RequestMapping("/sendpassword")
 	public String generatePassayPassword() {
 		PasswordGenerator gen = new PasswordGenerator();
 		CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
@@ -257,8 +270,8 @@ public class LaSalleRest  {
 		String password = gen.generatePassword(10, splCharRule, lowerCaseRule,
 			upperCaseRule, digitRule);
 		
-		System.out.println(password);
+		//System.out.println(password);
 		
-		  return password;
+		return password;
 	}
 }

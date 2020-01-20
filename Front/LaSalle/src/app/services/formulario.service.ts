@@ -23,9 +23,7 @@ export class FormularioService {
 
   crearAlumno (formulariomodel :FormularioModel) {
     console.log(formulariomodel);
-
     return this.http.post(`http://localhost:5000/alumnoingreso`,formulariomodel);
-
   }
 
   checarUsuario(matricula:String){
@@ -35,7 +33,11 @@ export class FormularioService {
   checarInscripcion(matricula:String){
     return this.http.get(`http://localhost:5000/verificarinscripcion?matricula=` + matricula);
   }
+
   checaUsuario2() : Observable<any> {
     return this.http.get<any>(`http://localhost:5000/verificarusuario`);
   }
+
+  //verificar el usuario http://localhost:5000/accede?usuario=112300111&&contrasena=tnGR6!a6@5
+
 }
