@@ -2,8 +2,10 @@ package com.lasalle.rest
 
 import org.springframework.http.HttpStatus
 import com.lasalle.model.Alumno
+import com.lasalle.model.DatosAlumnoGeneral
 import com.lasalle.model.FormularioIngreso
 import com.lasalle.model.Inscripcion
+import com.lasalle.model.ModificacionAlumno
 import com.lasalle.model.Usuario
 import com.lasalle.model.UsuarioCorreo
 import com.lasalle.repo.IAlumnoRepo
@@ -21,6 +23,7 @@ import org.springframework.mail.MailException
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -32,26 +35,70 @@ public class LaSalleRest  {
 	
 	@Autowired
 	private IAlumnoRepo repo;
-	
 	@Autowired
 	private IUsuarioRepo repo2;
-	
 	@Autowired
 	private IInscripcionRepo repo3;
-	
 	@Autowired
 	private MailService notificationService;
-	
 	@Autowired
 	private UsuarioCorreo usuarioCorreo;
-	
 	@Autowired
 	private FormularioIngreso formularioingreso;
+	@Autowired
+	private DatosAlumnoGeneral datosAlumno;
+	@Autowired
+	private ModificacionAlumno modificacionAlmuno;
 	
 	
 	@GetMapping("/alumno")
 	public List<Alumno> listar(){
 		return repo.findAll();
+	}
+	
+	@CrossOrigin
+	@PutMapping("/LaSalle/Alumno/Modificar")
+	public String modificar(@RequestBody ModificacionAlumno alumnoMod) {
+	
+	
+		String algo = alumnoMod.getIdMatricula();
+		System.out.println(algo);
+		Alumno alumno = new Alumno();
+		alumno = repo.findByidAlumnoMatricula(algo);
+		Usuario usuario = new Usuario();
+		usuario = repo2.findByidAlumnoMatricula(alumno);
+		
+		
+		if (alumno == null && usuario == null) {
+			return HttpStatus.BAD_REQUEST;
+		}
+		
+		if (alumnoMod.getNombre() != "ninguno") {
+			alumno.setNombre(alumnoMod.getNombre());
+		}
+		if (alumnoMod.getPaterno() != "ninguno") {
+			alumno.setPaterno(alumnoMod.getPaterno());
+		}
+		if (alumnoMod.getMaterno() != "ninguno") {
+			alumno.setMaterno(alumnoMod.getMaterno());
+		}
+		if (alumnoMod.getCorreo() != "ninguno") {
+			alumno.setCorreo(alumnoMod.getCorreo());
+		}
+		
+		if ((alumnoMod.getNombre() != "ninguno") || (alumnoMod.getPaterno() != "ninguno") || (alumnoMod.getMaterno() != "ninguno") 
+			|| (alumnoMod.getCorreo() != "ninguno")) {
+			System.out.println("Estoy Guardando");
+			repo.save(alumno);
+		}
+		
+		if (alumno != null && alumnoMod.getContrasena() != " ") {
+			usuario.setContrasena(alumnoMod.getContrasena());
+			System.out.println("Estoy Guardando");
+			repo2.save(usuario);
+		}
+		
+		return HttpStatus.OK;
 	}
 	
 	@CrossOrigin
@@ -80,6 +127,53 @@ public class LaSalleRest  {
 			return HttpStatus.BAD_REQUEST;
 		}
 		return HttpStatus.OK;
+	}
+	
+	@CrossOrigin
+	@GetMapping("/accede")
+	public String verificarAccede(String usuario, String contrasena) {
+		System.out.println("usuario" + usuario + "contrasena" + contrasena)
+		Usuario usarioVerificar = new Usuario();
+		usarioVerificar = repo2.findByidUsuarioLoguin(usuario, contrasena);
+		if (usarioVerificar == null)  {
+			System.out.println("Validando a los usuarios");
+			return HttpStatus.BAD_REQUEST;
+		}
+		return HttpStatus.OK;
+	}
+	
+	@CrossOrigin
+	@GetMapping("/LaSalle/Alumno/Informacion")
+	public DatosAlumnoGeneral obtenerDatosUsuario (String matricula) {
+		DatosAlumnoGeneral datosEnviar = new DatosAlumnoGeneral();
+		
+		Alumno alumno = new Alumno();
+		alumno = repo.findByidAlumnoMatricula(matricula);
+		if (alumno == null) {
+			return HttpStatus.BAD_REQUEST;
+		}
+		Usuario usuario = new Usuario();
+		usuario = repo2.findByidAlumnoMatricula(alumno);
+		if (usuario == null) {
+			return HttpStatus.BAD_REQUEST;
+		}
+		Inscripcion inscripcion = new Inscripcion();
+		inscripcion = repo3.findInscripcionByAlumno(alumno)
+		if (inscripcion == null) {
+			return HttpStatus.BAD_REQUEST;
+		}
+		
+		datosEnviar.setIdMatricula(alumno.getIdAlumnoMatricula());
+		datosEnviar.setUsuario(usuario.getUsuario());
+		datosEnviar.setNombre(alumno.getNombre());
+		datosEnviar.setPaterno(alumno.getPaterno());
+		datosEnviar.setMaterno(alumno.getMaterno());
+		datosEnviar.setCorreo(alumno.getCorreo());
+		datosEnviar.setSemestre((String)alumno.getSemestre());
+		datosEnviar.setGrado((String) inscripcion.getNivelAcademico());
+		datosEnviar.setEspecialidad((String) inscripcion.getEspecialidad());
+		
+		return datosEnviar;
 	}
 	
 	
@@ -227,6 +321,7 @@ public class LaSalleRest  {
 		return "Se envio el correo";
 	}
 	
+	//@RequestMapping("/sendpassword")
 	public String generatePassayPassword() {
 		PasswordGenerator gen = new PasswordGenerator();
 		CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
@@ -257,8 +352,8 @@ public class LaSalleRest  {
 		String password = gen.generatePassword(10, splCharRule, lowerCaseRule,
 			upperCaseRule, digitRule);
 		
-		System.out.println(password);
+		//System.out.println(password);
 		
-		  return password;
+		return password;
 	}
 }

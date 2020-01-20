@@ -17,6 +17,8 @@ public interface IUsuarioRepo extends JpaRepository <Usuario,Integer> {
 	BigDecimal max();
 	
 	@Query("SELECT t FROM Usuario t WHERE t.IdAlumno = ?1")
-	Usuario findByidAlumnoMatricula(Alumno id )
+	Usuario findByidAlumnoMatricula(Alumno id );
 	
+	@Query("SELECT t FROM Usuario t WHERE t.usuario = ?1 AND t.contrasena = ?2")
+	Usuario findByidUsuarioLoguin(String usuario, String contrasena);
 }

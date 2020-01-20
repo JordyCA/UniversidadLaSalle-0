@@ -24,7 +24,7 @@ public class MailService {
 		
 		mail.setTo(usuarioCorreo.getEmailAddress());
 		mail.setSubject("Registro de Inscripción");
-		mail.setText("Su registro de Inscripción ha sido exitoso favor de ingresar a la siguiente liga http://localhost:5000/LaSalle/ingresoAlumnos con el siguiente usuario :" + usuarioCorreo.getUsuario() + " y contraseña: " + usuarioCorreo.getContrasena());
+		mail.setText("Su registro de Inscripción ha sido exitoso favor de ingresar a la siguiente liga http://localhost:4200/LaSalle/ingresoAlumnos con el siguiente usuario :" + usuarioCorreo.getUsuario() + " y contraseña: " + usuarioCorreo.getContrasena());
 		
 		javaMailSender.send(mail);
 	}

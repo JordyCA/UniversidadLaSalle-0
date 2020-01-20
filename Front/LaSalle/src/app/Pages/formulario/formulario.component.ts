@@ -8,6 +8,7 @@ import { MaterializeModule } from 'angular2-materialize';
 import { analyzeNgModules } from '@angular/compiler';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-formulario',
@@ -17,7 +18,7 @@ import { map } from 'rxjs/operators';
 })
 export class FormularioComponent implements OnInit {
 
-  constructor( private formularioService : FormularioService) { }
+  constructor( private formularioService : FormularioService, private router: Router) { }
   
   private especialidad : any[] ;
   private usuario2 : any;
@@ -138,7 +139,6 @@ export class FormularioComponent implements OnInit {
   }
   guardar( form: NgForm  ) {
     //this.formularioService.checarUsuario() ;
-
     if (! (this.ValidateEmail(this.formulario.correo)) ) {
       M.toast({html: 'El correo electrónico es invalido', classes: 'rounded red'});
     } else if ( document.getElementById('validacionUsuario').innerHTML == " El usuario ya existe " 
@@ -157,6 +157,8 @@ export class FormularioComponent implements OnInit {
           if (error.error.text === '400 BAD_REQUEST') {
             console.log ("Se validará en el formulario")
             this.manejoErroresGeneral =  "El formulario tiene campos faltantes o los campos no son correctos";
+          } else {
+            this.router.navigate(['inscipcion/succes']);
           }
         }
         );
